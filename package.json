@@ -1,0 +1,41 @@
+{
+  "name": "@litert/socks5",
+  "version": "0.1.0",
+  "description": "The socks5 protocol library for LiteRT.",
+  "main": "lib/index.js",
+  "scripts": {
+    "prepublishOnly": "npm run rebuild",
+    "build": "echo Using TypeScript && tsc -v && tsc -p .",
+    "build-watch": "echo Using TypeScript && tsc -v && tsc -w -p .",
+    "rebuild": "npm run clean && npm run lint && npm run build",
+    "clean": "rm -rf lib examples test",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "eslint --ext ts src",
+    "prepare": "husky install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/litert/socks5.js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/litert/socks5.js/issues"
+  },
+  "homepage": "https://github.com/litert/socks5.js#readme",
+  "keywords": [
+    "litert",
+    "proxy",
+    "socks5"
+  ],
+  "author": "Angus.Fenying <fenying@litert.org> (https://fenying.net)",
+  "license": "Apache-2.0",
+  "typings": "lib/index.d.ts",
+  "types": "lib/index.d.ts",
+  "devDependencies": {
+    "@commitlint/cli": "^17.6.1",
+    "@commitlint/config-conventional": "^17.6.1",
+    "@litert/eslint-plugin-rules": "^0.1.3",
+    "@types/node": "^18.16.3",
+    "husky": "^8.0.3",
+    "typescript": "^5.0.4"
+  }
+}
