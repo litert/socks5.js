@@ -29,7 +29,7 @@ export class SocketControl {
 
     private _promiseControl: IPromiseControl | null = null;
 
-    private _closeOnData: boolean = false;
+    private _stopAfterRead: boolean = false;
 
     public constructor(
         public readonly socket: Net.Socket,
@@ -38,7 +38,7 @@ export class SocketControl {
         this.socket
             .on('data', (d) => {
 
-                if (this._closeOnData) {
+                if (this._stopAfterRead) {
 
                     this.stopProxy();
                 }
@@ -59,9 +59,9 @@ export class SocketControl {
             });
     }
 
-    public readPacket(closeAfterRead: boolean = false): Promise<Buffer> {
+    public readPacket(stopAfterRead: boolean = false): Promise<Buffer> {
 
-        this._closeOnData = closeAfterRead;
+        this._stopAfterRead = stopAfterRead;
 
         if (this._promiseControl) {
 

@@ -7,33 +7,40 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "[LiteRT/Socks5] Test IPv4",
-            "program": "${workspaceFolder}/src/examples/test-ipv4.ts",
+            "name": "[LiteRT/Socks5] Test HTTPS request over proxy",
+            "program": "${workspaceFolder}/src/examples/test-https.ts",
             "sourceMaps": true,
             "outFiles": [
                 "${workspaceFolder}/**/*.js"
             ],
             "env": {
-                "lrt_socks5_host": "127.0.0.1",
-                "lrt_socks5_port": "1080",
-                "lrt_socks5_username": "admin",
-                "lrt_socks5_password": "qwer1234"
+                "http_proxy": "socks5://user:passwd@127.0.0.1:1080"
             }
         },
         {
             "type": "node",
             "request": "launch",
-            "name": "[LiteRT/Socks5] Test Domain",
-            "program": "${workspaceFolder}/src/examples/test-domain.ts",
+            "name": "[LiteRT/Socks5] Test HTTP request over proxy",
+            "program": "${workspaceFolder}/src/examples/test-http.ts",
             "sourceMaps": true,
             "outFiles": [
                 "${workspaceFolder}/**/*.js"
             ],
             "env": {
-                "lrt_socks5_host": "127.0.0.1",
-                "lrt_socks5_port": "1080",
-                "lrt_socks5_username": "admin",
-                "lrt_socks5_password": "qwer1234"
+                "http_proxy": "socks5://user:passwd@127.0.0.1:1080"
+            }
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "[LiteRT/Socks5] Test HTTP2 request over proxy",
+            "program": "${workspaceFolder}/src/examples/test-http2.ts",
+            "sourceMaps": true,
+            "outFiles": [
+                "${workspaceFolder}/**/*.js"
+            ],
+            "env": {
+                "http_proxy": "socks5://user:passwd@127.0.0.1:1080"
             }
         }
     ]

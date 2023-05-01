@@ -118,7 +118,7 @@ async function stageAuth(
     }
 }
 
-async function handshake(sCtrl: SocketControl, auth: C.IConnectOptions['server']['auth']): Promise<void> {
+async function handshake(sCtrl: SocketControl, auth: C.IClientAuthOptions | null): Promise<void> {
 
     const serverAuthMethod = await stageGreeting(sCtrl);
 
@@ -292,34 +292,83 @@ async function startProxy(sCtrl: SocketControl, target: C.IConnectOptions['targe
     }
 }
 
+function parseOptions(optOrUrl: string | C.IServerConnectOptions): Required<C.IServerConnectOptions> {
+
+    if (typeof optOrUrl === 'string') {
+
+        const url = new URL(optOrUrl);
+
+        if (url.protocol !== 'socks5:') {
+
+            throw new TypeError('Only SOCKS5 proxy is supported.');
+        }
+
+        if (typeof url.hostname !== 'string') {
+
+            throw new TypeError('Invalid hostname in URL.');
+        }
+
+        const port = url.port === undefined ? Constants.DEFAULT_PORT : parseInt(url.port);
+
+        if (!Number.isInteger(port) || port < 0 || port > 65535) {
+
+            throw new TypeError('Invalid port in URL.');
+        }
+
+        optOrUrl = {
+            'host': url.hostname,
+            'auth': url.username && url.password ? {
+                'username': url.username,
+                'password': url.password,
+            } : null,
+            'port': port,
+            'connectTimeout': Constants.DEFAULT_TIMEOUT,
+            'handshakeTimeout': Constants.DEFAULT_TIMEOUT,
+        };
+    }
+
+    return {
+        'connectTimeout': Constants.DEFAULT_TIMEOUT,
+        'handshakeTimeout': Constants.DEFAULT_TIMEOUT,
+        'port': Constants.DEFAULT_PORT,
+        'auth': null,
+        ...optOrUrl,
+    };
+}
+
 /**
  * Create a socket that connects to target `host:port` through determined SOCKS5 proxy server.
  *
- * > The socket is not configured with 30s `timeout` by default, you can set it manually.
+ * > The timeout of socket is set to `handshakeTimeout`, which is 30s by default, you can set
+ * > it manually after connected.
  * >
  * > Except for `timeout`, all other options are the same as `node:net` module does.
  * >
- * > Besides, you should notice that `address()` does not refer to the target `host:port`, but the proxy server's `host:port`.
+ * > Besides, you should notice that `address()` does not refer to the target `host:port`, but the
+ * > proxy server's `host:port`.
  *
  * @returns A normal socket provided by `node:net` module, and it is already connected to target `host:port`, though a SOCKS5 proxy server.
  */
 export async function connect(options: C.IConnectOptions): Promise<Net.Socket> {
 
+    const serverOpts = parseOptions(options.server);
     const sControl = new SocketControl(await createSocket(
-        options.server.host,
-        options.server.port,
-        options.server.connectTimeout,
+        serverOpts.host,
+        serverOpts.port,
+        serverOpts.connectTimeout,
     ));
 
-    sControl.socket.setTimeout(options.server.handshakeTimeout ?? Constants.DEFAULT_TIMEOUT);
+    sControl.socket.setTimeout(serverOpts.handshakeTimeout ?? Constants.DEFAULT_TIMEOUT);
 
     try {
 
-        await handshake(sControl, options.server.auth);
+        await handshake(sControl, serverOpts.auth);
 
         await startProxy(sControl, options.target);
 
-        return sControl.socket;
+        sControl.socket.setTimeout(0);
+
+        return sControl.socket.setTimeout(0);
     }
     catch (e) {
 

@@ -25,6 +25,11 @@ export enum EAuthMethod {
  */
 export const DEFAULT_TIMEOUT = 30_000;
 
+/**
+ * The default port of SOCKS5 server.
+ */
+export const DEFAULT_PORT = 1080;
+
 export enum ETargetHostnameType {
     IPV4 = 0x01,
     DOMAIN = 0x03,

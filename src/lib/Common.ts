@@ -29,41 +29,45 @@ export interface IClientAuthOptions {
     password: string;
 }
 
+export interface IServerConnectOptions {
+
+    /**
+     * The hostname of the socks server.
+     */
+    host: string;
+
+    /**
+     * The port of the socks server.
+     *
+     * @default 1080
+     */
+    port?: number;
+
+    /**
+     * The timeout during connecting to the socks server.
+     *
+     * @default 30000
+     */
+    connectTimeout?: number;
+
+    /**
+     * The timeout during connecting to the socks server.
+     *
+     * @default 30000
+     */
+    handshakeTimeout?: number;
+
+    /**
+     * The optional authentication options of the socks server.
+     *
+     * @default null
+     */
+    auth?: IClientAuthOptions | null;
+}
+
 export interface IConnectOptions {
 
-    server: {
-
-        /**
-         * The hostname of the socks server.
-         */
-        host: string;
-
-        /**
-         * The port of the socks server.
-         */
-        port: number;
-
-        /**
-         * The timeout during connecting to the socks server.
-         *
-         * @default 30000
-         */
-        connectTimeout?: number;
-
-        /**
-         * The timeout during connecting to the socks server.
-         *
-         * @default 30000
-         */
-        handshakeTimeout?: number;
-
-        /**
-         * The optional authentication options of the socks server.
-         *
-         * @default null
-         */
-        auth?: IClientAuthOptions | null;
-    };
+    server: IServerConnectOptions | string;
 
     target: {
 

@@ -1,6 +1,6 @@
 {
   "name": "@litert/socks5",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "The socks5 protocol library for LiteRT.",
   "main": "lib/index.js",
   "scripts": {
